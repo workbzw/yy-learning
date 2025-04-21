@@ -6,7 +6,7 @@ export function HistoryList() {
     <div className="mb-20">
       <h2 className="flex items-center text-lg font-medium mb-3">
         <Image src="/icons/history.png" alt="历史" width={24} height={24} />
-        <span className="ml-2">历史识别</span>
+        <span className="ml-2 text-black">历史识别</span>
       </h2>
       <div className="flex gap-2 mb-4">
         {dates.map(date => (
@@ -28,7 +28,7 @@ export function HistoryList() {
               height={150}
               className="mx-auto mb-3"
             />
-            <p className="text-center">这是一把椅子</p>
+            <p className="text-center text-black">这是一把椅子</p>
             <button className="block ml-auto">
               <Image src="/icons/play.png" alt="播放" width={24} height={24} />
             </button>
