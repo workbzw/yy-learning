@@ -28,7 +28,7 @@ export function HistoryList() {
               height={150}
               className="mx-auto mb-3"
             />
-            <p className="text-center text-black dark:text-white">这是一把椅子</p>
+            <p className="text-center text-black">这是一把椅子</p>
             <button className="block ml-auto">
               <Image src="/icons/play.png" alt="播放" width={24} height={24} />
             </button>
