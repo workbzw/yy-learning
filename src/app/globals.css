@@ -1,0 +1,11 @@
+.icon-button {
+  background-image: url(/images/e.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
