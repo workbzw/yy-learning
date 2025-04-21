@@ -14,7 +14,7 @@ export function TodayRecommend() {
           height={200}
           className="mx-auto mb-3"
         />
-        <p className="text-center text-lg text-black dark:text-white">这是一把椅子</p>
+        <p className="text-center text-lg text-black">这是一把椅子</p>
         <p className="text-center text-gray-500">今日推荐</p>
       </div>
     </div>
