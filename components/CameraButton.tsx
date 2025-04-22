@@ -45,9 +45,36 @@ export function CameraButton() {
     if (context) {
       context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
       const dataUrl = canvas.toDataURL('image/png');
+      
+      // 保存照片数据
       setPhotoData(dataUrl);
       setPhotoTaken(true);
       stopCamera();
+      
+      // 上传到服务器
+      uploadPhoto(dataUrl);
+    }
+  };
+
+  // 添加上传函数
+  const uploadPhoto = async (imageData: string) => {
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image: imageData }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('上传失败');
+      }
+      
+      const result = await response.json();
+      console.log('上传成功:', result);
+    } catch (error) {
+      console.error('上传错误:', error);
     }
   };
 
