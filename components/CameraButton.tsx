@@ -90,18 +90,29 @@ export function CameraButton() {
     
     try {
       const canvas = document.createElement('canvas');
-      canvas.width = previewVideoRef.current.videoWidth || 640;
-      canvas.height = previewVideoRef.current.videoHeight || 480;
+      // 确保获取到视频尺寸
+      const videoWidth = previewVideoRef.current.videoWidth || 640;
+      const videoHeight = previewVideoRef.current.videoHeight || 480;
+      console.log('视频尺寸:', videoWidth, 'x', videoHeight);
+      
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
       
       const context = canvas.getContext('2d');
       if (context) {
-        context.drawImage(previewVideoRef.current, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL('image/png');
-        console.log('拍照成功，数据长度:', dataUrl.length);
-        setPhotoData(dataUrl);
-        setPhotoTaken(true);
-        setIsPreviewMode(false);
-        stopCamera();
+        // 确保视频已经加载完成
+        if (previewVideoRef.current.readyState === 4) {
+          context.drawImage(previewVideoRef.current, 0, 0, canvas.width, canvas.height);
+          const dataUrl = canvas.toDataURL('image/png');
+          console.log('拍照成功，数据长度:', dataUrl.length);
+          setPhotoData(dataUrl);
+          setPhotoTaken(true);
+          setIsPreviewMode(false);
+          stopCamera();
+        } else {
+          console.error('视频尚未准备好，readyState:', previewVideoRef.current.readyState);
+          alert('请等待摄像头准备就绪');
+        }
       } else {
         console.error('无法获取canvas上下文');
       }
@@ -144,18 +155,21 @@ export function CameraButton() {
             muted
             className="w-full h-full object-cover"
             onCanPlay={() => console.log('预览视频可以播放')}
+            onLoadedMetadata={() => console.log('预览视频元数据已加载')}
+            onLoadedData={() => console.log('预览视频数据已加载')}
             onError={(e) => {
               console.error('预览视频加载失败:', e);
               setError('预览视频加载失败，请检查摄像头权限');
             }}
           />
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
             <button
-              className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-red-500 hover:bg-red-600 active:bg-red-700"
+              className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-red-500 hover:bg-red-600 active:bg-red-700 focus:outline-none"
               onClick={() => {
                 console.log('拍照按钮被点击');
                 takePhoto();
               }}
+              type="button"
             >
               <Image 
                 src="/icons/camera.png" 
@@ -163,6 +177,14 @@ export function CameraButton() {
                 width={32} 
                 height={32} 
               />
+            </button>
+            <button
+              className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"
+              onClick={() => {
+                setIsPreviewMode(false);
+              }}
+            >
+              返回
             </button>
           </div>
         </div>
