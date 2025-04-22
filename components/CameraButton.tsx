@@ -89,6 +89,13 @@ export function CameraButton() {
     }
     
     try {
+      // 强制等待视频加载完成
+      if (previewVideoRef.current.readyState < 2) {
+        console.log('视频尚未准备好，等待加载...');
+        setTimeout(takePhoto, 500);
+        return;
+      }
+      
       const canvas = document.createElement('canvas');
       // 确保获取到视频尺寸
       const videoWidth = previewVideoRef.current.videoWidth || 640;
@@ -100,21 +107,18 @@ export function CameraButton() {
       
       const context = canvas.getContext('2d');
       if (context) {
-        // 确保视频已经加载完成
-        if (previewVideoRef.current.readyState === 4) {
-          context.drawImage(previewVideoRef.current, 0, 0, canvas.width, canvas.height);
-          const dataUrl = canvas.toDataURL('image/png');
-          console.log('拍照成功，数据长度:', dataUrl.length);
-          setPhotoData(dataUrl);
-          setPhotoTaken(true);
-          setIsPreviewMode(false);
-          stopCamera();
-        } else {
-          console.error('视频尚未准备好，readyState:', previewVideoRef.current.readyState);
-          alert('请等待摄像头准备就绪');
-        }
+        context.drawImage(previewVideoRef.current, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/png');
+        console.log('拍照成功，数据长度:', dataUrl.length);
+        
+        // 确保状态更新顺序正确
+        setPhotoData(dataUrl);
+        setIsPreviewMode(false);
+        setPhotoTaken(true);
+        stopCamera();
       } else {
         console.error('无法获取canvas上下文');
+        alert('拍照失败，请重试');
       }
     } catch (err) {
       console.error('拍照过程中出错:', err);
@@ -165,17 +169,20 @@ export function CameraButton() {
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
             <button
               className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-red-500 hover:bg-red-600 active:bg-red-700 focus:outline-none"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault(); // 防止事件冒泡
                 console.log('拍照按钮被点击');
                 takePhoto();
               }}
               type="button"
+              id="takePhotoButton" // 添加ID便于调试
             >
               <Image 
                 src="/icons/camera.png" 
                 alt="确认拍照" 
                 width={32} 
                 height={32} 
+                priority={true} // 优先加载图标
               />
             </button>
             <button
