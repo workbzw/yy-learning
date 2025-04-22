@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 export function CameraButton() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const previewVideoRef = useRef<HTMLVideoElement>(null);
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
   const [photoData, setPhotoData] = useState('');
@@ -44,29 +45,53 @@ export function CameraButton() {
     }
   };
 
+  const enterPreviewMode = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment',
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        }
+      });
+      
+      if (previewVideoRef.current) {
+        previewVideoRef.current.srcObject = stream;
+        previewVideoRef.current.onloadedmetadata = () => {
+          setIsPreviewMode(true);
+        };
+      }
+    } catch (err) {
+      console.error('Error accessing camera for preview:', err);
+      setError('无法访问摄像头，请检查权限设置');
+    }
+  };
+
   const stopCamera = () => {
     if (videoRef.current?.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
       stream.getTracks().forEach(track => track.stop());
       setIsCameraOn(false);
     }
-  };
-
-  const enterPreviewMode = () => {
-    setIsPreviewMode(true);
+    
+    if (previewVideoRef.current?.srcObject) {
+      const stream = previewVideoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+    }
   };
 
   const takePhoto = () => {
-    if (!videoRef.current) return;
+    if (!previewVideoRef.current) return;
     
     const canvas = document.createElement('canvas');
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
+    canvas.width = previewVideoRef.current.videoWidth;
+    canvas.height = previewVideoRef.current.videoHeight;
     
     const context = canvas.getContext('2d');
     if (context) {
-      context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+      context.drawImage(previewVideoRef.current, 0, 0, canvas.width, canvas.height);
       const dataUrl = canvas.toDataURL('image/png');
+      console.log('拍照成功，数据长度:', dataUrl.length);
       setPhotoData(dataUrl);
       setPhotoTaken(true);
       setIsPreviewMode(false);
@@ -101,15 +126,15 @@ export function CameraButton() {
       {isPreviewMode && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
           <video
-            ref={videoRef}
+            ref={previewVideoRef}
             autoPlay
             playsInline
             muted
             className="w-full h-full object-cover"
-            onCanPlay={() => console.log('视频可以播放')}
+            onCanPlay={() => console.log('预览视频可以播放')}
             onError={(e) => {
-              console.error('视频加载失败:', e);
-              setError('视频加载失败，请检查摄像头权限');
+              console.error('预览视频加载失败:', e);
+              setError('预览视频加载失败，请检查摄像头权限');
             }}
           />
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
@@ -136,6 +161,7 @@ export function CameraButton() {
               src={photoData} 
               alt="拍照结果" 
               className="max-w-full max-h-[70%] object-contain"
+              onLoad={() => console.log('图片加载成功')}
               onError={(e) => {
                 console.error('图片加载失败');
                 e.currentTarget.style.display = 'none';
