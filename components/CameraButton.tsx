@@ -8,6 +8,7 @@ export function CameraButton() {
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
   const [photoData, setPhotoData] = useState('');
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
 
   // 自动启动摄像头
   useEffect(() => {
@@ -30,6 +31,7 @@ export function CameraButton() {
         videoRef.current.srcObject = stream;
         setIsCameraOn(true);
         setPhotoTaken(false);
+        setIsPreviewMode(false);
       }
     } catch (err) {
       console.error('Error accessing camera:', err);
@@ -42,6 +44,10 @@ export function CameraButton() {
       stream.getTracks().forEach(track => track.stop());
       setIsCameraOn(false);
     }
+  };
+
+  const enterPreviewMode = () => {
+    setIsPreviewMode(true);
   };
 
   const takePhoto = () => {
@@ -57,6 +63,7 @@ export function CameraButton() {
       const dataUrl = canvas.toDataURL('image/png');
       setPhotoData(dataUrl);
       setPhotoTaken(true);
+      setIsPreviewMode(false);
       stopCamera();
     }
   };
@@ -73,8 +80,33 @@ export function CameraButton() {
         ref={videoRef}
         autoPlay
         playsInline
-        className={`w-full h-full object-cover ${!photoTaken && isCameraOn ? '' : 'hidden'}`}
+        className={`w-full h-full object-cover ${!photoTaken && isCameraOn && !isPreviewMode ? '' : 'hidden'}`}
       />
+      
+      {/* 预览模式 */}
+      {isPreviewMode && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+            <button
+              className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-red-500 hover:bg-red-600"
+              onClick={takePhoto}
+            >
+              <Image 
+                src="/icons/camera.png" 
+                alt="确认拍照" 
+                width={32} 
+                height={32} 
+              />
+            </button>
+          </div>
+        </div>
+      )}
       
       {/* 拍照结果预览 */}
       {photoTaken && (
@@ -83,7 +115,6 @@ export function CameraButton() {
             src={photoData} 
             alt="拍照结果" 
             className="max-w-full max-h-[70%] object-contain"
-            onLoad={() => console.log('Image loaded successfully')}
           />
           <div className="flex gap-4 mt-4">
             <button 
@@ -102,12 +133,12 @@ export function CameraButton() {
         </div>
       )}
       
-      {/* 拍照按钮 */}
-      {!photoTaken && (
+      {/* 初始拍照按钮 */}
+      {!photoTaken && !isPreviewMode && (
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
           <button
             className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-red-500 hover:bg-red-600"
-            onClick={takePhoto}
+            onClick={enterPreviewMode}
           >
             <Image 
               src="/icons/camera.png" 
