@@ -13,7 +13,9 @@ export function CameraButton() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: 'environment' // 强制使用后置摄像头
+          facingMode: 'environment',
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
         }
       });
       if (videoRef.current) {
@@ -52,8 +54,8 @@ export function CameraButton() {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-end pb-8">
-      {/* 摄像头预览 */}
+    <div className="fixed inset-0 flex flex-col">
+      {/* 摄像头预览 - 现在会始终显示 */}
       <video
         ref={videoRef}
         autoPlay
@@ -69,19 +71,21 @@ export function CameraButton() {
       )}
       
       {/* 拍照按钮 */}
-      <button
-        className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg ${
-          isCameraOn ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
-        }`}
-        onClick={isCameraOn ? takePhoto : startCamera}
-      >
-        <Image 
-          src={isCameraOn ? "/icons/camera.png" : "/icons/camera-off.png"} 
-          alt={isCameraOn ? "拍照" : "开启摄像头"} 
-          width={32} 
-          height={32} 
-        />
-      </button>
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+        <button
+          className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg ${
+            isCameraOn ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
+          }`}
+          onClick={isCameraOn ? takePhoto : startCamera}
+        >
+          <Image 
+            src={isCameraOn ? "/icons/camera.png" : "/icons/camera-off.png"} 
+            alt={isCameraOn ? "拍照" : "开启摄像头"} 
+            width={32} 
+            height={32} 
+          />
+        </button>
+      </div>
     </div>
   );
 }
