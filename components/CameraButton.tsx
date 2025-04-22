@@ -61,14 +61,14 @@ export function CameraButton() {
     }
   };
 
-  const resetCamera = () => {
+  const handleBack = () => {
     setPhotoTaken(false);
     startCamera();
   };
 
   return (
     <div className="fixed inset-0 flex flex-col">
-      {/* 摄像头预览 - 默认显示 */}
+      {/* 摄像头预览 */}
       <video
         ref={videoRef}
         autoPlay
@@ -79,13 +79,26 @@ export function CameraButton() {
       {/* 拍照结果预览 */}
       {photoTaken && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
-          <img src={photoData} alt="拍照结果" className="max-w-full max-h-[80%]" />
-          <button 
-            onClick={resetCamera}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            重新拍照
-          </button>
+          <img 
+            src={photoData} 
+            alt="拍照结果" 
+            className="max-w-full max-h-[70%] object-contain"
+            onLoad={() => console.log('Image loaded successfully')}
+          />
+          <div className="flex gap-4 mt-4">
+            <button 
+              onClick={startCamera}
+              className="px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              重新拍照
+            </button>
+            <button 
+              onClick={handleBack}
+              className="px-4 py-2 bg-gray-500 text-white rounded"
+            >
+              返回
+            </button>
+          </div>
         </div>
       )}
       
