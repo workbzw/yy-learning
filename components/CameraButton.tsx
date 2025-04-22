@@ -24,6 +24,7 @@ export function CameraButton() {
   const startCamera = async () => {
     try {
       setError('');
+      setIsPreviewMode(false); // 明确设置为非预览模式
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: 'environment',
@@ -36,7 +37,8 @@ export function CameraButton() {
         videoRef.current.onloadedmetadata = () => {
           setIsCameraOn(true);
           setPhotoTaken(false);
-          setIsPreviewMode(false); // 确保不会自动进入预览模式
+          setIsPreviewMode(false);
+          // 移除了未定义的setIsCameraReady调用
         };
       }
     } catch (err) {
@@ -48,6 +50,8 @@ export function CameraButton() {
 
   // 修改预览模式函数，确保正确设置状态
   const enterPreviewMode = async () => {
+    if (!isCameraOn) return; // 确保摄像头已开启
+    
     try {
       // 先停止主摄像头
       if (videoRef.current?.srcObject) {
