@@ -104,7 +104,13 @@ export function CameraButton() {
             ref={videoRef}
             autoPlay
             playsInline
+            muted
             className="w-full h-full object-cover"
+            onCanPlay={() => console.log('视频可以播放')}
+            onError={(e) => {
+              console.error('视频加载失败:', e);
+              setError('视频加载失败，请检查摄像头权限');
+            }}
           />
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
             <button
