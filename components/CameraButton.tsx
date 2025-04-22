@@ -59,6 +59,7 @@ export function CameraButton() {
         previewVideoRef.current.srcObject = stream;
         previewVideoRef.current.onloadedmetadata = () => {
           setIsPreviewMode(true);
+          console.log('已进入预览模式');
         };
       }
     } catch (err) {
@@ -81,21 +82,32 @@ export function CameraButton() {
   };
 
   const takePhoto = () => {
-    if (!previewVideoRef.current) return;
+    console.log('开始拍照');
+    if (!previewVideoRef.current) {
+      console.error('预览视频元素不存在');
+      return;
+    }
     
-    const canvas = document.createElement('canvas');
-    canvas.width = previewVideoRef.current.videoWidth;
-    canvas.height = previewVideoRef.current.videoHeight;
-    
-    const context = canvas.getContext('2d');
-    if (context) {
-      context.drawImage(previewVideoRef.current, 0, 0, canvas.width, canvas.height);
-      const dataUrl = canvas.toDataURL('image/png');
-      console.log('拍照成功，数据长度:', dataUrl.length);
-      setPhotoData(dataUrl);
-      setPhotoTaken(true);
-      setIsPreviewMode(false);
-      stopCamera();
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = previewVideoRef.current.videoWidth || 640;
+      canvas.height = previewVideoRef.current.videoHeight || 480;
+      
+      const context = canvas.getContext('2d');
+      if (context) {
+        context.drawImage(previewVideoRef.current, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/png');
+        console.log('拍照成功，数据长度:', dataUrl.length);
+        setPhotoData(dataUrl);
+        setPhotoTaken(true);
+        setIsPreviewMode(false);
+        stopCamera();
+      } else {
+        console.error('无法获取canvas上下文');
+      }
+    } catch (err) {
+      console.error('拍照过程中出错:', err);
+      setError('拍照失败，请重试');
     }
   };
 
@@ -139,8 +151,11 @@ export function CameraButton() {
           />
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
             <button
-              className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-red-500 hover:bg-red-600"
-              onClick={takePhoto}
+              className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-red-500 hover:bg-red-600 active:bg-red-700"
+              onClick={() => {
+                console.log('拍照按钮被点击');
+                takePhoto();
+              }}
             >
               <Image 
                 src="/icons/camera.png" 
