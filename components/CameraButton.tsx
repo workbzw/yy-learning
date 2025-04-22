@@ -63,8 +63,38 @@ export function CameraButton() {
       
       {/* 拍照结果预览 */}
       {photoTaken && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black">
-          <img src={photoData} alt="拍照结果" className="max-w-full max-h-full" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
+          {photoData ? (
+            <img 
+              src={photoData} 
+              alt="拍照结果" 
+              className="max-w-full max-h-[70%] object-contain"
+              onLoad={() => console.log('图片加载成功')}
+              onError={(e) => {
+                console.error('图片加载失败');
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          ) : (
+            <div className="text-white">图片加载中...</div>
+          )}
+          <div className="flex gap-4 mt-4">
+            <button 
+              onClick={startCamera}
+              className="px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              重新拍照
+            </button>
+            <button 
+              onClick={() => {
+                setPhotoTaken(false);
+                startCamera();
+              }}
+              className="px-4 py-2 bg-gray-500 text-white rounded"
+            >
+              返回
+            </button>
+          </div>
         </div>
       )}
       
