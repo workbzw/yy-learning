@@ -12,8 +12,9 @@ export function CameraButton() {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [error, setError] = useState('');
 
-  // 自动启动摄像头
+  // 自动启动摄像头，但不进入预览模式
   useEffect(() => {
+    // 只启动主摄像头，不进入预览模式
     startCamera();
     return () => {
       stopCamera();
@@ -35,7 +36,7 @@ export function CameraButton() {
         videoRef.current.onloadedmetadata = () => {
           setIsCameraOn(true);
           setPhotoTaken(false);
-          setIsPreviewMode(false);
+          setIsPreviewMode(false); // 确保不会自动进入预览模式
         };
       }
     } catch (err) {
@@ -45,8 +46,15 @@ export function CameraButton() {
     }
   };
 
+  // 修改预览模式函数，确保正确设置状态
   const enterPreviewMode = async () => {
     try {
+      // 先停止主摄像头
+      if (videoRef.current?.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach(track => track.stop());
+      }
+      
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: 'environment',
@@ -81,6 +89,7 @@ export function CameraButton() {
     }
   };
 
+  // 修改拍照函数，确保正确处理事件
   const takePhoto = () => {
     console.log('开始拍照');
     if (!previewVideoRef.current) {
@@ -169,13 +178,8 @@ export function CameraButton() {
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
             <button
               className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-red-500 hover:bg-red-600 active:bg-red-700 focus:outline-none"
-              onClick={(e) => {
-                e.preventDefault(); // 防止事件冒泡
-                console.log('拍照按钮被点击');
-                takePhoto();
-              }}
+              onClick={takePhoto} // 简化点击事件，移除事件冒泡阻止和额外的日志
               type="button"
-              id="takePhotoButton" // 添加ID便于调试
             >
               <Image 
                 src="/icons/camera.png" 
@@ -188,7 +192,9 @@ export function CameraButton() {
             <button
               className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"
               onClick={() => {
+                // 返回主摄像头视图
                 setIsPreviewMode(false);
+                startCamera(); // 确保返回时重新启动主摄像头
               }}
             >
               返回
