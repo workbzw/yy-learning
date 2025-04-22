@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef } from 'react';
 import Image from 'next/image'
 
@@ -27,9 +29,8 @@ export function CameraButton() {
           canvasRef.current.width,
           canvasRef.current.height
         );
-        // 这里可以获取照片数据
         const imageData = canvasRef.current.toDataURL('image/png');
-        console.log(imageData); // 或者上传到服务器
+        console.log(imageData);
       }
     }
   };
