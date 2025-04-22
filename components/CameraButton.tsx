@@ -110,7 +110,7 @@ export function CameraButton() {
         onClick={isCameraOn ? takePhoto : startCamera}
       >
         <Image 
-          src={isCameraOn ? "/icons/camera.png" : "/icons/camera.png"} 
+          src={"/icons/camera.png"} 
           alt={isCameraOn ? "拍照" : "开启摄像头"} 
           width={32} 
           height={32} 
