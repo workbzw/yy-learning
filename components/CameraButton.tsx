@@ -9,6 +9,7 @@ export function CameraButton() {
   const [photoTaken, setPhotoTaken] = useState(false);
   const [photoData, setPhotoData] = useState('');
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [error, setError] = useState('');
 
   // 自动启动摄像头
   useEffect(() => {
@@ -20,6 +21,7 @@ export function CameraButton() {
 
   const startCamera = async () => {
     try {
+      setError('');
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: 'environment',
@@ -29,12 +31,16 @@ export function CameraButton() {
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        setIsCameraOn(true);
-        setPhotoTaken(false);
-        setIsPreviewMode(false);
+        videoRef.current.onloadedmetadata = () => {
+          setIsCameraOn(true);
+          setPhotoTaken(false);
+          setIsPreviewMode(false);
+        };
       }
     } catch (err) {
       console.error('Error accessing camera:', err);
+      setError('无法访问摄像头，请检查权限设置');
+      setIsCameraOn(false);
     }
   };
 
@@ -75,12 +81,20 @@ export function CameraButton() {
 
   return (
     <div className="fixed inset-0 flex flex-col">
+      {/* 错误提示 */}
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black text-white">
+          {error}
+        </div>
+      )}
+
       {/* 摄像头预览 */}
       <video
         ref={videoRef}
         autoPlay
         playsInline
-        className={`w-full h-full object-cover ${!photoTaken && isCameraOn && !isPreviewMode ? '' : 'hidden'}`}
+        muted
+        className={`w-full h-full object-cover ${!photoTaken && isCameraOn && !isPreviewMode && !error ? '' : 'hidden'}`}
       />
       
       {/* 预览模式 */}
