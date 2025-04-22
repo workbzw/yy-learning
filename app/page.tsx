@@ -29,7 +29,7 @@ export default function Home() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
-          }}>
+          }}>搜索
             <Image src="/icons/search.png" alt="搜索" width={16} height={16} />
           </button>
           <button className="p-2 rounded-full hover:bg-gray-100" style={{
