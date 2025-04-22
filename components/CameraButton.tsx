@@ -88,7 +88,11 @@ export function CameraButton() {
             <button 
               onClick={() => {
                 setPhotoTaken(false);
-                startCamera();
+                setIsCameraOn(false); // 确保完全退出拍照模式
+                if (videoRef.current?.srcObject) {
+                  const stream = videoRef.current.srcObject as MediaStream;
+                  stream.getTracks().forEach(track => track.stop());
+                }
               }}
               className="px-4 py-2 bg-gray-500 text-white rounded"
             >
