@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image'
 
 export function CameraButton() {
@@ -8,6 +8,14 @@ export function CameraButton() {
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
   const [photoData, setPhotoData] = useState('');
+
+  // 自动启动摄像头
+  useEffect(() => {
+    startCamera();
+    return () => {
+      stopCamera();
+    };
+  }, []);
 
   const startCamera = async () => {
     try {
@@ -53,39 +61,50 @@ export function CameraButton() {
     }
   };
 
+  const resetCamera = () => {
+    setPhotoTaken(false);
+    startCamera();
+  };
+
   return (
     <div className="fixed inset-0 flex flex-col">
-      {/* 摄像头预览 - 现在会始终显示 */}
+      {/* 摄像头预览 - 默认显示 */}
       <video
         ref={videoRef}
         autoPlay
         playsInline
-        className={`w-full h-full object-cover ${isCameraOn ? '' : 'hidden'}`}
+        className={`w-full h-full object-cover ${!photoTaken && isCameraOn ? '' : 'hidden'}`}
       />
       
       {/* 拍照结果预览 */}
       {photoTaken && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black">
-          <img src={photoData} alt="拍照结果" className="max-w-full max-h-full" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
+          <img src={photoData} alt="拍照结果" className="max-w-full max-h-[80%]" />
+          <button 
+            onClick={resetCamera}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            重新拍照
+          </button>
         </div>
       )}
       
       {/* 拍照按钮 */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-        <button
-          className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg ${
-            isCameraOn ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
-          }`}
-          onClick={isCameraOn ? takePhoto : startCamera}
-        >
-          <Image 
-            src={isCameraOn ? "/icons/camera.png" : "/icons/camera-off.png"} 
-            alt={isCameraOn ? "拍照" : "开启摄像头"} 
-            width={32} 
-            height={32} 
-          />
-        </button>
-      </div>
+      {!photoTaken && (
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <button
+            className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-red-500 hover:bg-red-600"
+            onClick={takePhoto}
+          >
+            <Image 
+              src="/icons/camera.png" 
+              alt="拍照" 
+              width={32} 
+              height={32} 
+            />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
