@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
         // 模拟AI响应
         const aiResponse = {
-            message: "这是来自AI的回复。您可以在这里集成实际的AI服务。"
+            message: `body:${body},data:${data},messages:${messages}`,
         };
 
         return NextResponse.json(aiResponse);
