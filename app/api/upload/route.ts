@@ -38,21 +38,12 @@ export async function POST(request: Request) {
                 body: Buffer.from(imageData), // 使用从请求中获取的数据
               });
               // object size: 11
-              console.log('object size:', data['content-length']);
             } catch (error) {
               handleError(error);
             }
           }
-        const body = request.body;
-        const data = await request.json();
-        const messages = data.messages;
-        console.log("----------------body----------------");
-        console.log(body);
-        console.log("----------------data----------------");
-        console.log(data);
-        console.log("----------------message----------------");
-        console.log(messages);
-
+          main();
+        const { body, data, messages } = await request.json();
         // 这里连接您的AI服务
         // 例如OpenAI API或其他AI服务
         // const aiResponse = await callAIService(messages);
