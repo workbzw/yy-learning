@@ -24,8 +24,8 @@ export async function POST(request: Request) {
           }
           async function main() {
             try {
-              const bucketName = 'node-sdk-test-bucket';
-              const objectName = 'example_dir/example.txt';
+              const bucketName = 'yylearning';
+              const objectName = 'test';
               
               // 从请求中获取数据
               const requestData = await request.json();
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
               handleError(error);
             }
           }
-          main();
+        await main();
         // 这里连接您的AI服务
         // 例如OpenAI API或其他AI服务
         // const aiResponse = await callAIService(messages);
