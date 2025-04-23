@@ -44,27 +44,32 @@ export function CameraButton() {
     const context = canvas.getContext('2d');
     if (context) {
       context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-      const dataUrl = canvas.toDataURL('image/png');
       
-      // 保存照片数据
-      setPhotoData(dataUrl);
-      setPhotoTaken(true);
-      stopCamera();
-      
-      // 上传到服务器
-      uploadPhoto(dataUrl);
+      // 直接转换为Blob对象(JPG格式)
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          setPhotoTaken(true);
+          stopCamera();
+          
+          // 创建临时URL用于预览
+          const objectUrl = URL.createObjectURL(blob);
+          setPhotoData(objectUrl);
+          
+          // 上传Blob对象
+          await uploadPhoto(blob);
+        }
+      }, 'image/jpeg', 0.9); // 0.9表示JPEG质量
     }
   };
 
-  // 添加上传函数
-  const uploadPhoto = async (imageData: string) => {
+  const uploadPhoto = async (imageBlob: Blob) => {
     try {
+      const formData = new FormData();
+      formData.append('image', imageBlob, 'photo.jpg');
+      
       const response = await fetch('/api/upload', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ image: imageData }),
+        body: formData // 不需要设置Content-Type头部
       });
       
       if (!response.ok) {
