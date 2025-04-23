@@ -51,10 +51,10 @@ export async function POST(request: Request) {
         });
         const result = await getImgInfo(url);
 
-        supabase.from('yy_photo').insert({
+        await supabase.from('yy_photo').insert({
           url: url,
           title: result,
-        });
+        }).select();
 
         return {
           success: true,
