@@ -35,7 +35,7 @@ export async function POST(request: Request) {
               await client.putObject({
                 bucket: bucketName,
                 key: objectName,
-                body: imageData, // 使用从请求中获取的数据
+                body: Buffer.from(imageData), // 使用从请求中获取的数据
               });
               // object size: 11
               console.log('object size:', data['content-length']);
