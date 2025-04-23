@@ -46,9 +46,11 @@ export async function POST(request: Request) {
         const body = request.body;
         const data = await request.json();
         const messages = data.messages;
-        console.log("--------------------------------");
+        console.log("----------------body----------------");
         console.log(body);
+        console.log("----------------data----------------");
         console.log(data);
+        console.log("----------------message----------------");
         console.log(messages);
 
         // 这里连接您的AI服务
