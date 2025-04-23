@@ -43,14 +43,13 @@ export async function POST(request: Request) {
             }
           }
           main();
-        const { body, data, messages } = await request.json();
         // 这里连接您的AI服务
         // 例如OpenAI API或其他AI服务
         // const aiResponse = await callAIService(messages);
 
         // 模拟AI响应
         const aiResponse = {
-            message: `body:${body},data:${data},messages:${messages}`,
+            message: `body:test`,
         };
 
         return NextResponse.json(aiResponse);
