@@ -59,28 +59,12 @@ export function CameraButton() {
   // 添加上传函数
   const uploadPhoto = async (imageData: string) => {
     try {
-      // 从base64字符串中提取纯数据部分
-      const base64Data = imageData.replace(/^data:image\/\w+;base64,/, "");
-      
-      // 将base64转换为二进制数据
-      const byteString = atob(base64Data);
-      const arrayBuffer = new ArrayBuffer(byteString.length);
-      const uint8Array = new Uint8Array(arrayBuffer);
-      
-      for (let i = 0; i < byteString.length; i++) {
-        uint8Array[i] = byteString.charCodeAt(i);
-      }
-      
-      // 创建Blob对象(JPEG格式)
-      const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
-      
-      // 创建FormData并上传
-      const formData = new FormData();
-      formData.append('image', blob, 'photo.jpg');
-  
       const response = await fetch('/api/upload', {
         method: 'POST',
-        body: formData  // 不需要设置Content-Type头部，浏览器会自动处理
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image: imageData }),
       });
       
       if (!response.ok) {

@@ -25,36 +25,31 @@ export async function POST(request: Request) {
           async function main() {
             try {
               const bucketName = 'yylearning';
-              const objectName = 'test';
+              const objectName = 'test01.jpg';
               
               // 从请求中获取数据
               const requestData = await request.json();
               const imageData = requestData.image; // 假设前端发送的是{image: base64String}
-
+              
               // 上传对象
               await client.putObject({
                 bucket: bucketName,
                 key: objectName,
-                body: Buffer.from(imageData), // 使用从请求中获取的数据
+                body: imageData, // 使用从请求中获取的数据
               });
-              // object size: 11
+              
+              return {
+                success: true,
+                message: '图片上传成功'
+              };
             } catch (error) {
               handleError(error);
             }
           }
-        await main();
-        // 这里连接您的AI服务
-        // 例如OpenAI API或其他AI服务
-        // const aiResponse = await callAIService(messages);
-
-        // 模拟AI响应
-        const aiResponse = {
-            message: `body:test`,
-        };
-
-        return NextResponse.json(aiResponse);
+        const result = await main();
+        return NextResponse.json(result);
     } catch (error) {
-        console.error('处理聊天请求时出错:', error);
+        console.error('处理上传请求时出错:', error);
         return NextResponse.json(
             { error: '处理请求失败' },
             { status: 500 }
