@@ -68,12 +68,15 @@ export function CameraButton() {
       });
       
       if (!response.ok) {
+        alert('上传失败');
         throw new Error('上传失败');
       }
       
       const result = await response.json();
       console.log('上传成功:', result);
+      alert("上传成功："+result.message);
     } catch (error) {
+      alert("上传错误"+error);
       console.error('上传错误:', error);
     }
   };
