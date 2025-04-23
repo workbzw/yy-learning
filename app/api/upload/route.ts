@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       try {
         const bucketName = 'yylearning';
         const objectName = `photo-${Date.now()}.jpg`; // 使用时间戳生成唯一文件名
-        const url_prx = "https://yylearning.tos-cn-guangzhou.volces.com/photo-1745446212325.jpg";
+        const url_prx = "https://yylearning.tos-cn-guangzhou.volces.com/";
         const url = url_prx + objectName
         // 获取FormData
         const formData = await request.formData();
