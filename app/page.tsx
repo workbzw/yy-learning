@@ -7,9 +7,9 @@ import { CameraButton } from '@/components/CameraButton'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-sky-50 to-white p-4 pb-20"> {/* 增加底部内边距 */}
-      {/* Header */}
-      <header className="flex items-center justify-between mb-6">
+    <div className="flex flex-col min-h-screen">
+      {/* Header 部分 - 固定不动 */}
+      <header className="sticky top-0 z-51 bg-white p-4">
         <div className="flex items-center">
           <Image
             src="/logo.png"
@@ -62,23 +62,29 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Content 部分 - 可滑动内容 */}
+      <main className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-sky-50 to-white" style={{ 
+        marginBottom: '100px',
+        position: 'relative',
+        zIndex: 1  // 设置为最低层级
+      }}>
+        {/* Search Bar */}
+        <SearchBar />
+        
+        {/* Today's Recommendation */}
+        <TodayRecommend />
+        
+        {/* History */}
+        <HistoryList />
+      </main>
 
-      {/* 可滑动内容区域 */}
-      <div className="overflow-y-auto h-[calc(100vh-200px)]">
-        <div className="min-h-full"> {/* 添加这个包装div */}
-          {/* Search Bar */}
-          <SearchBar />
-
-          {/* Today's Recommendation */}
-          <TodayRecommend />
-
-          {/* History */}
-          <HistoryList />
-        </div>
+      {/* Tab 部分 - 底部固定栏 */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4" style={{ 
+        height: '100px',
+        zIndex: 10  // 设置为中等层级
+      }}>
+        <CameraButton />
       </div>
-
-      {/* 底部固定栏位 */}
-      <CameraButton />
-    </main>
+    </div>
   )
 }
