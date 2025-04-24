@@ -28,6 +28,12 @@ export async function POST(request: Request) {
         console.log('unexpected exception, message: ', error);
       }
     }
+    async function fetchDetails(entity: string): Promise<any> {
+      const res = await fetch(`https://bodhi-data.deno.dev/text_search_v2?keyword=${entity}&table_name=cantonese_corpus_all&column=data&limit=10`, {
+        method: 'GET',
+      })
+      return await res.json()
+    }
     async function main(request: Request) {
       try {
         const bucketName = 'yylearning';
@@ -51,9 +57,12 @@ export async function POST(request: Request) {
         });
         const result = await getImgInfo(url);
 
+        const details = await fetchDetails(result);
+
         await supabase.from('yy_photo').insert({
           url: url,
           title: result,
+          details: details,
         }).select();
 
         return {
@@ -92,7 +101,7 @@ async function getImgInfo(imgUrl: string): Promise<string> {
     model: "qwen-vl-max", // 此处以qwen-vl-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
     messages: [{
       role: "user", content: [
-        { type: "text", text: "这是什么？请用一句话回答我，并且字数保持在10字以内" },
+        { type: "text", text: "这是什么？请直接回答我名词，并且字数保持在10字以内" },
         { type: "image_url", image_url: { "url": imgUrl } }
       ]
     }]
