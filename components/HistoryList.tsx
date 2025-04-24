@@ -25,7 +25,7 @@ export function HistoryList() {
         id: item.id,
         url: item.url,
         title: item.title,
-        description: item.details 
+        description: item.details // 使用title作为description
       })))
     })
   }, [])
@@ -56,12 +56,12 @@ export function HistoryList() {
           </button>
         ))}
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4" style={{ zIndex: 0 }}>
         {historyItems.map(item => (
           <div 
             key={item.id} 
-            className="bg-white rounded-xl p-4 shadow-sm cursor-pointer"
-            style={{ position: 'relative', zIndex: 1 }} // 添加z-index确保元素在最上层
+            className="bg-white rounded-xl p-4 shadow-sm cursor-pointer pointer-events-auto"
+            style={{ position: 'relative', zIndex: 1 ,pointerEvents: 'auto'}}
             onClick={() => {
               console.log("Div clicked - 测试点击");
               handlePlayClick(item);
@@ -74,20 +74,21 @@ export function HistoryList() {
               height={150}
               className="mx-auto mb-3"
             />
-            <p className="text-center text-black">{item.description}</p>
+            <p className="text-center text-black">{item.title}</p>
             <button 
-              className="block ml-auto"
+              className="block ml-auto z-[9999]"
               onClick={(e) => {
-                e.stopPropagation(); // 阻止按钮点击事件冒泡
+                e.stopPropagation();
+                handlePlayClick(item); // 添加播放按钮的点击处理
               }}
             >
-              <Image 
+              {/* <Image 
                 src="/icons/play.png" 
                 alt="播放" 
                 width={24} 
                 height={24}
                 style={{ pointerEvents: 'none' }}
-              />
+              /> */}
             </button>
           </div>
         ))}
@@ -95,25 +96,43 @@ export function HistoryList() {
 
       {/* 添加弹窗 */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">详细信息</h3>
-            <div className="space-y-2">
+        <div 
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100]"
+          onClick={() => setShowModal(false)}
+        >
+          <div 
+            className="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-md w-full z-[101] shadow-xl border border-gray-200 dark:border-gray-700 mx-4 my-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">详细信息</h3>
+              <button 
+                className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                onClick={() => setShowModal(false)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="space-y-4 text-gray-700 dark:text-gray-300 px-2">
               {modalData && (
                 <>
-                  <p><strong>ID:</strong> {modalData.id}</p>
-                  <p><strong>标题:</strong> {modalData.title}</p>
-                  <p><strong>描述:</strong> {modalData.description}</p>
-                  {/* 添加更多动态字段 */}
+                  <div className="flex">
+                    <span className="font-medium w-20">ID:</span>
+                    <span>{modalData.id}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="font-medium w-20">标题:</span>
+                    <span>{modalData.title}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="font-medium w-20">描述:</span>
+                    <span>{modalData.description}</span>
+                  </div>
                 </>
               )}
             </div>
-            <button 
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-              onClick={() => setShowModal(false)}
-            >
-              关闭
-            </button>
           </div>
         </div>
       )}

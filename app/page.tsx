@@ -7,7 +7,7 @@ import { CameraButton } from '@/components/CameraButton'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-sky-50 to-white p-4">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 to-white p-4 pb-20"> {/* 增加底部内边距 */}
       {/* Header */}
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center">
@@ -62,16 +62,22 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Search Bar */}
-      <SearchBar />
 
-      {/* Today's Recommendation */}
-      <TodayRecommend />
+      {/* 可滑动内容区域 */}
+      <div className="overflow-y-auto h-[calc(100vh-200px)]">
+        <div className="min-h-full"> {/* 添加这个包装div */}
+          {/* Search Bar */}
+          <SearchBar />
 
-      {/* History */}
-      <HistoryList />
+          {/* Today's Recommendation */}
+          <TodayRecommend />
 
-      {/* Camera Button */}
+          {/* History */}
+          <HistoryList />
+        </div>
+      </div>
+
+      {/* 底部固定栏位 */}
       <CameraButton />
     </main>
   )

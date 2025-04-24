@@ -87,7 +87,7 @@ export function CameraButton() {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-end pb-8">
+    <div className="fixed inset-0 flex flex-col items-center justify-end pb-8 pointer-events-auto">
       {/* 摄像头预览 */}
       <video
         ref={videoRef}
@@ -139,7 +139,7 @@ export function CameraButton() {
       
       {/* 拍照按钮 */}
       <button
-        className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg ${
+        className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-[0] ${
           isCameraOn ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
         }`}
         onClick={isCameraOn ? takePhoto : startCamera}
@@ -147,8 +147,8 @@ export function CameraButton() {
         <Image 
           src={"/icons/camera.png"} 
           alt={isCameraOn ? "拍照" : "开启摄像头"} 
-          width={32} 
-          height={32} 
+          width={24} 
+          height={24} 
         />
       </button>
     </div>
