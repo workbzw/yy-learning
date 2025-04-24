@@ -31,7 +31,7 @@ export function TodayRecommend() {
       </h2>
       <div className="bg-white rounded-xl p-4 shadow-sm">
         <Image
-          src={recommend.url}
+          src={recommend.url || ''}
           alt={recommend.title}
           width={200}
           height={200}
