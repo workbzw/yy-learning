@@ -158,6 +158,38 @@ export function HistoryList() {
                                 <span className="font-medium mr-2"></span>
                                 <span>{noteItem.context.描述}</span>
                               </div>}
+                              {noteItem.context.粤语 && <div className="flex items-center">
+                                {/* <span>{noteItem.context.粤语}</span> */}
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    const audio = new Audio(noteItem.context.粤语);
+                                    audio.play();
+                                  }}
+                                  className="ml-2 p-1 rounded-full bg-blue-100 hover:bg-blue-200"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                                  </svg>
+                                </button>
+                                <span className="font-medium mr-2">粤语</span>
+                              </div>}
+                              {noteItem.context.普通话 && <div className="flex items-center">
+                                {/* <span>{noteItem.context.普通话}</span> */}
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    const audio = new Audio(noteItem.context.普通话);
+                                    audio.play();
+                                  }}
+                                  className="ml-2 p-1 rounded-full bg-blue-100 hover:bg-blue-200"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                                  </svg>
+                                </button>
+                                <span className="font-medium mr-2">普通话</span>
+                              </div>}
                             </div>
                           ))}
                         </div>
