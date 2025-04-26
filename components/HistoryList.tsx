@@ -56,10 +56,10 @@ export function HistoryList() {
       </div>
       <div className="grid grid-cols-2 gap-4" >
         {historyItems.map(item => (
-          <div 
-            key={item.id} 
+          <div
+            key={item.id}
             className="bg-white rounded-xl p-4 shadow-sm cursor-pointer pointer-events-auto"
-            style={{ position: 'relative',pointerEvents: 'auto'}}
+            style={{ position: 'relative', pointerEvents: 'auto' }}
             onClick={() => {
               console.log("Div clicked - 测试点击");
               handlePlayClick(item);
@@ -73,7 +73,7 @@ export function HistoryList() {
               className="mx-auto mb-3"
             />
             <p className="text-center text-black">{item.title}</p>
-            <button 
+            <button
               className="block ml-auto"
               onClick={(e) => {
                 e.stopPropagation();
@@ -94,17 +94,17 @@ export function HistoryList() {
 
       {/* 添加弹窗 */}
       {showModal && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100]"
           onClick={() => setShowModal(false)}
         >
-          <div 
+          <div
             className="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-md w-full z-[101] shadow-xl border border-gray-200 dark:border-gray-700 mx-4 my-8"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white"></h3>
-              <button 
+              <button
                 className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                 onClick={() => setShowModal(false)}
               >
@@ -125,41 +125,51 @@ export function HistoryList() {
                     <span>{modalData.title}</span>
                   </div> */}
                   {/* <div className="flex"> */}
-                    {/* <span className="font-medium w-20">描述:</span> */}
-                    <div className="flex flex-col space-y-4">
-                      {modalData.details && JSON.parse(modalData.details).map((item: any, index: number) => (
-                        <div key={index} className="bg-gray-50 p-4 rounded-lg">
-                          <div className="mb-2">
-                            <span className="font-medium"> </span>
-                            <span>{item.data}</span>
-                          </div>
-                          <div className="space-y-2">
-                            {item.note.map((noteItem: any, noteIndex: number) => (
-                              <div key={noteIndex} className="border-l-2 border-blue-200 pl-3">
-                                <div className="flex items-center">
-                                  <span className="font-medium mr-2">发音:</span>
-                                  <span>{noteItem.context.pron}</span>
-                                </div>
-                                <div className="flex items-center">
-                                  <span className="font-medium mr-2">英文:</span>
-                                  <span>{noteItem.context.english}</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
+                  {/* <span className="font-medium w-20">描述:</span> */}
+                  <div className="flex flex-col space-y-4">
+                    {modalData.details && JSON.parse(modalData.details).map((item: any, index: number) => (
+                      <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                        <div className="mb-2">
+                          <span className="font-medium"> </span>
+                          <span>{item.data}</span>
                         </div>
-                      ))}
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {modalData.details && JSON.parse(modalData.details)[0]?.tags?.map((tag: string, tagIndex: number) => (
-                        <span 
-                          key={tagIndex} 
-                          className="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                        <div className="space-y-2">
+                          {item.note.map((noteItem: any, noteIndex: number) => (
+                            <div key={noteIndex} className="border-l-2 border-blue-200 pl-3">
+                              {noteItem.context.pron && <div className="flex items-center">
+                                <span className="font-medium mr-2">发音:</span>
+                                <span>{noteItem.context.pron}</span>
+                              </div>}
+                              {noteItem.context.english && <div className="flex items-center">
+                                <span className="font-medium mr-2">英文:</span>
+                                <span>{noteItem.context.english}</span>
+                              </div>}
+                              {noteItem.context.voxel && (
+                                <div className="mt-2">
+                                  <iframe
+                                    src={noteItem.context.voxel}
+                                    className="w-full h-40 border rounded-lg"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {modalData.details && JSON.parse(modalData.details)[0]?.tags?.map((tag: string, tagIndex: number) => (
+                      <span
+                        key={tagIndex}
+                        className="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                   {/* </div> */}
                 </>
               )}
