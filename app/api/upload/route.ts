@@ -28,7 +28,7 @@ export async function POST(request: Request) {
         console.log('unexpected exception, message: ', error);
       }
     }
-    
+
     async function fetchDetails(entity: string): Promise<any> {
       const res = await fetch(`https://bodhi-data.deno.dev/text_search_v2?keyword=${entity}&table_name=cantonese_corpus_all&column=data&limit=1`, {
         method: 'GET',
@@ -56,7 +56,10 @@ export async function POST(request: Request) {
           body: Buffer.from(await imageFile.arrayBuffer()),
           contentType: 'image/jpeg'
         });
-        const result = await getImgInfo(url);
+        let result = await getImgInfo(url);
+        if (result.indexOf("船") !== -1) {
+          result = "帆船";
+        }
 
         const details = await fetchDetails(result);
 
