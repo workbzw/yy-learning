@@ -97,7 +97,7 @@ const Main = () => {
       padding: '20px', 
       overflowY: 'auto', 
       height: 'calc(100vh - 160px)',
-      backgroundColor: 'white'  // 添加白色背景
+      backgroundColor: 'white'
     }}>
       <SearchBar />
 
