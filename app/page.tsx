@@ -37,7 +37,7 @@ const Header = () => {
           width={32}
           height={32}
         />
-        <span className="ml-2 text-lg font-medium text-black">粤语学习</span>
+        <span className="ml-2 text-lg font-medium text-black">粤语智识</span>
       </div>
       <div className="flex gap-4">
         <button className="p-2 rounded-full hover:bg-gray-100" style={{
