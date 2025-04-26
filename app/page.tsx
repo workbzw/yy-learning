@@ -33,7 +33,7 @@ const Header = () => {
       <div className="flex items-center">
         <Image
           src="/logo.png"
-          alt="粤语学习"
+          alt="粤语智识"
           width={32}
           height={32}
         />
