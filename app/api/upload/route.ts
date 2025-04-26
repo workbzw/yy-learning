@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     }
     
     async function fetchDetails(entity: string): Promise<any> {
-      const res = await fetch(`https://bodhi-data.deno.dev/text_search_v2?keyword=${entity}&table_name=cantonese_corpus_all&column=data&limit=10`, {
+      const res = await fetch(`https://bodhi-data.deno.dev/text_search_v2?keyword=${entity}&table_name=cantonese_corpus_all&column=data&limit=1`, {
         method: 'GET',
       })
       return await res.json()
