@@ -87,18 +87,18 @@ export function CameraButton() {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-end pb-8 pointer-events-auto">
+    <div className="fixed inset-0 flex flex-col items-center justify-end pb-8 pointer-events-none">
       {/* 摄像头预览 */}
       <video
         ref={videoRef}
         autoPlay
         playsInline
-        className={`w-full h-full object-cover ${isCameraOn ? '' : 'hidden'}`}
+        className={`w-full h-full object-cover ${isCameraOn ? '' : 'hidden'} pointer-events-auto`}
       />
       
       {/* 拍照结果预览 */}
       {photoTaken && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black pointer-events-auto">
           {photoData ? (
             <img 
               src={photoData} 
@@ -139,7 +139,7 @@ export function CameraButton() {
       
       {/* 拍照按钮 */}
       <button
-        className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-[0] ${
+        className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full flex items-center justify-center shadow-lg pointer-events-auto ${
           isCameraOn ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
         }`}
         onClick={isCameraOn ? takePhoto : startCamera}
