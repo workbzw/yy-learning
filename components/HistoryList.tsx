@@ -154,6 +154,10 @@ export function HistoryList() {
                                   />
                                 </div>
                               )}
+                              {noteItem.context.描述 && <div className="flex items-center">
+                                <span className="font-medium mr-2"></span>
+                                <span>{noteItem.context.描述}</span>
+                              </div>}
                             </div>
                           ))}
                         </div>

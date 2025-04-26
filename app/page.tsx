@@ -127,7 +127,7 @@ const Footer = () => {
       }}
     >
       <div style={{ position: 'relative', zIndex: 10 }}>
-        <CameraButton />
+        <CameraButton  />
       </div>
     </footer>
   );

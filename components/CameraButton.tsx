@@ -79,10 +79,13 @@ export function CameraButton() {
       
       const result = await response.json();
       console.log('上传成功:', result);
-      alert("上传成功："+result.message);
+      alert("上传成功："+result.msg);
+      window.location.reload()
+
     } catch (error) {
       alert("上传错误"+error);
       console.error('上传错误:', error);
+      window.location.reload()
     }
   };
 

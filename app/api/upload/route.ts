@@ -70,9 +70,9 @@ export async function POST(request: Request) {
         }).select();
 
         return {
-          success: true,
-          message: '图片上传成功',
-          filename: objectName
+          code: 200,
+          msg: 'success',
+          data: {}
         };
       } catch (error) {
         handleError(error);
