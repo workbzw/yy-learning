@@ -127,11 +127,13 @@ export function HistoryList() {
                   {/* <div className="flex"> */}
                   {/* <span className="font-medium w-20">描述:</span> */}
                   <div className="flex flex-col space-y-4">
+                    <span>{modalData.title}</span>
+                  
                     {modalData.details && JSON.parse(modalData.details).map((item: any, index: number) => (
                       <div key={index} className="bg-gray-50 p-4 rounded-lg">
                         <div className="mb-2">
                           <span className="font-medium"> </span>
-                          <span>{item.data}</span>
+                          {/* <span>{item.data}</span> */}
                         </div>
                         <div className="space-y-2">
                           {item.note.map((noteItem: any, noteIndex: number) => (
