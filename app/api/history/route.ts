@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import {NextRequest, NextResponse} from 'next/server';
 import { TosClient, TosClientError, TosServerError } from '@volcengine/tos-sdk';
 import { createClient } from '@supabase/supabase-js'
 
@@ -6,12 +6,20 @@ const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey)
 // Create a single supabase client for interacting with your database
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
+    const uid = request.cookies.get("uid")?.value
+    if (!uid){
+      return NextResponse.json(
+          { error: '处理请求失败，缺少uid' },
+          { status: 500 }
+      );
+    }
     const { data, error } = await supabase
       .from('yy_photo')
       .select()
       .eq('status', 1)
+      .eq('uid', uid)
     console.log(data)
     return NextResponse.json({ code: 200, msg: 'success', data: data });
   } catch (error) {
