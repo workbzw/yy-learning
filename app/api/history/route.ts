@@ -1,10 +1,10 @@
 import {NextRequest, NextResponse} from 'next/server';
 import { TosClient, TosClientError, TosServerError } from '@volcengine/tos-sdk';
-import { createClient } from '@supabase/supabase-js'
+import {createClient} from "@/utils/supabase/server";
 
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey)
+const client = await createClient()
 // Create a single supabase client for interacting with your database
 export async function GET(request: NextRequest) {
   try {
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
           { status: 500 }
       );
     }
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from('yy_photo')
       .select()
       .eq('status', 1)
