@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
 
                 const details = await fetchDetails(result);
 
-                await supabase.from('yy_photo').insert({
+                const DBResult = await supabase.from('yy_photo').insert({
                     url: url,
                     uid: uid,
                     title: result,
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
                 return {
                     code: 200,
                     msg: 'success',
-                    data: {}
+                    data: {data: DBResult.data}
                 };
             } catch (error) {
                 handleError(error);
