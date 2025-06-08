@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
                     uid: uid,
                     title: result,
                     details: details,
-                }).select();
+                }).select().single();
 
                 return {
                     code: 200,
