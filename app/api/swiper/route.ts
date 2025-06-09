@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     try {
         const {data, error} = await supabase
             .from('yy_recommend')
-            .select('url')
+            .select()
             .order('id', {ascending: false})
             .limit(5)
         console.log(data)
