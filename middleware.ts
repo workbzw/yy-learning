@@ -45,6 +45,7 @@ export const config = {
         "/api/user:path*",
         "/api/history:path*",
         "/api/upload:path*",
-        "/api/search:path*"
+        "/api/search:path*",
+        "/api/chat:path*",
     ],
 };

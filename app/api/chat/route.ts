@@ -1,6 +1,5 @@
 import {createClient} from "@/utils/supabase/server";
 import {NextRequest, NextResponse} from "next/server";
-import {generateToken} from "@/utils/utils";
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -16,45 +15,20 @@ async function chatNormal(text_user: string): Promise<string> {
         // model: "qwen-vl-max", // 此处以qwen-vl-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         model: "qwen-max", // 此处以qwen-vl-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages: [
-            {role: "system", content: "你是非常专业的高考报考老师，你姓张，大家叫你张老师，请不要回到与报考无关的问题。"},
+            {role: "system", content: "你是非常专业的粤语使用者，你负责使用粤语回答问题。请注意：1. 回答必须遵守中华人民共和国相关法律法规；2. 不得涉及色情、暴力、政治敏感等违规内容；3. 不得传播虚假信息或误导性内容；4. 保持积极、健康、向上的价值导向。"},
             {role: "user", content: text_user},
-            // {role: "user", content: [
-            //         {type: "text", text: text_user},
-            //         // { type: "image_url", image_url: { "url": imgUrl } }
-            //     ]
-            // }
             ]
     });
     return response.choices[0].message.content ?? "llm error";
-    console.log(JSON.stringify(response));
 }
-// 辅助函数：解析 cookie 字符串
-const parseCookies = (cookieHeader: string | null): Record<string, string> => {
-    const cookies: Record<string, string> = {};
-    if (!cookieHeader) return cookies;
-
-    cookieHeader.split(';').forEach(cookie => {
-        const [name, value] = cookie.trim().split('=');
-        if (name) cookies[name] = value || '';
-    });
-
-    return cookies;
-};
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json()
-        // const cookieHeader = req.headers.get('cookie');
-        // const cookies = parseCookies(cookieHeader);
         const uid = req.cookies.get("uid")?.value
-        // const uid = cookies['uid']
-        const {text} = body
-
-        const answer = await chatNormal(text)
-
+        const {q} = body
+        const answer = await chatNormal(q)
         const client = await createClient()
-        await client.from('yy_chat').insert({'uid':uid,'text':text})
-
-
+        await client.from('yy_chat').insert({'uid':uid,'text':q})
         return NextResponse.json({code: 200, msg: 'success', data: {data: answer}});
     } catch (error) {
         console.error('处理上传请求时出错:', error);
