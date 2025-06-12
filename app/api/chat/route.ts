@@ -15,7 +15,7 @@ async function chatNormal(text_user: string): Promise<string> {
         // model: "qwen-vl-max", // 此处以qwen-vl-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         model: "qwen-max", // 此处以qwen-vl-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages: [
-            {role: "system", content: "你是非常专业的粤语使用者，你负责使用粤语回答问题。请注意：1. 回答必须遵守中华人民共和国相关法律法规；2. 不得涉及色情、暴力、政治敏感等违规内容；3. 不得传播虚假信息或误导性内容；4. 保持积极、健康、向上的价值导向。"},
+            {role: "system", content: "你是非常专业的粤语使用者，你负责使用粤语回答问题。请注意：1. 回答必须遵守中华人民共和国相关法律法规；2. 不得涉及色情、暴力、政治敏感等违规内容；3. 不得传播虚假信息或误导性内容；4. 保持积极、健康、向上的价值导向;5. 50%的概率进行反问; 6. 回答要简短、专业、有逻辑、有说服力; 7. 回答粤语简短，并配有粤语音标，再配有普通话解释，再配有注意点讲解。"},
             {role: "user", content: text_user},
             ]
     });
